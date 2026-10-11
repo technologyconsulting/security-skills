@@ -1,0 +1,27 @@
+{
+  "name": "security-skills",
+  "version": "0.1.0",
+  "description": "Security skills for coding agents: threat model a service, review a diff against that model, audit secrets, and gate a release. Every skill reads and reports; none changes a system.",
+  "author": {
+    "name": "Blankitt",
+    "url": "https://blankitt.com"
+  },
+  "homepage": "https://blankitt.com/skills",
+  "repository": "https://github.com/technologyconsulting/security-skills",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "threat-model",
+    "code-review",
+    "secrets",
+    "release",
+    "skills"
+  ],
+  "skills": [
+    "./skills/engineering/setup-security-skills",
+    "./skills/engineering/threat-model",
+    "./skills/engineering/threat-review",
+    "./skills/engineering/secrets-audit",
+    "./skills/engineering/pre-release"
+  ]
+}

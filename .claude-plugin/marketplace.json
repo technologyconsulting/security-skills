@@ -1,0 +1,23 @@
+{
+  "name": "technologyconsulting",
+  "owner": {
+    "name": "Blankitt",
+    "url": "https://blankitt.com"
+  },
+  "description": "Blankitt's security skills for coding agents, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "security-skills",
+      "source": "./",
+      "description": "Threat model a service, review changes against it, audit secrets, gate a release. Read-only by design.",
+      "category": "security",
+      "keywords": [
+        "security",
+        "threat-model",
+        "code-review",
+        "secrets",
+        "release"
+      ]
+    }
+  ]
+}
