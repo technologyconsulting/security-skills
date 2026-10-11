@@ -1,0 +1,34 @@
+name: Security-team skill proposal
+description: Propose a skill for the security-team bucket, with the system it was tested on.
+labels: ["security-team"]
+body:
+  - type: markdown
+    attributes:
+      value: "Proposals here are open, on one condition from SCOPE.md: the skill has been run against a real system and you can say what it found."
+  - type: input
+    id: name
+    attributes:
+      label: Skill name
+      placeholder: "linux-hardening-review"
+    validations:
+      required: true
+  - type: textarea
+    id: system
+    attributes:
+      label: The real system it was tested on
+      description: What it is (OS, platform, tenant type), anonymised as needed.
+    validations:
+      required: true
+  - type: textarea
+    id: found
+    attributes:
+      label: What it found there
+    validations:
+      required: true
+  - type: textarea
+    id: readonly
+    attributes:
+      label: How it stays read-only
+      description: Every command it runs, and why none of them changes the system.
+    validations:
+      required: true

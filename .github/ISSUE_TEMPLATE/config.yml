@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussion
+    url: https://github.com/technologyconsulting/security-skills/discussions
+    about: Anything that is not an observed failure or a security-team proposal.

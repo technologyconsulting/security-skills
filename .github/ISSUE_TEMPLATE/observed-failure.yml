@@ -1,0 +1,41 @@
+name: Observed failure
+description: A skill did the wrong thing in a real session.
+labels: ["observed-failure"]
+body:
+  - type: markdown
+    attributes:
+      value: "Read SCOPE.md first. An issue stays open only if it describes something that happened in a real session and fits the read-only rule."
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      options: [setup-security-skills, threat-model, threat-review, secrets-audit, pre-release]
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and version
+      placeholder: "Claude Code 2.x, plugin 0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: ran
+    attributes:
+      label: What you ran
+      description: The command and the arguments, and roughly what the repo looks like (stack, platform).
+    validations:
+      required: true
+  - type: textarea
+    id: did
+    attributes:
+      label: What the skill did
+      description: Quote the relevant part of its output. Strip anything private.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
