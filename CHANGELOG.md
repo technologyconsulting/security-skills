@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 (2026-10-12)
+
+Fixes for the bugs and inconsistencies from the first review. `release.md` gains fields, so re-run `/setup-security-skills` on existing repos.
+
+- **`/secrets-audit` finds hardcoded secrets.** New step 4 scans tracked source for credential prefixes and secret-named literals, printing only the redacted shape. Step 1 now covers `import.meta.env`, `Bun.env`, `Deno.env.get`, bracketed and destructured access, and flags secrets behind client prefixes (`VITE_`, `NEXT_PUBLIC_` and others).
+- **`release.md` records rollback, release branch, default target and test safety.** `/pre-release` reads them: it prints the real rollback command, checks the recorded release branch, says which environment it chose, and skips tests that touch shared systems instead of running them.
+- **Clean-tree check no longer passes with nothing checked.** With no paths listed it checks the whole tree, untracked files included.
+- **`/threat-model` refresh keeps human decisions.** Accepted risks and human-written lines are carried over word for word; risks whose entry point vanished are kept for the human to retire.
+- **Wording.** The read-only rule now names setup's pointer block and says when a test run counts as read-only. The glossary notes `/secrets-audit` reads the secret-list command. `/threat-review` no longer claims "pre-release check", which belongs to `/pre-release`.
+
 ## 0.2.0 (2026-10-12)
 
 Fixes for the four high findings from the first review of the pack.

@@ -22,6 +22,9 @@ Read what exists. Assume nothing.
 
 - `package.json` scripts, `Makefile`, `justfile`, `Cargo.toml`, `pyproject.toml`: which commands build, typecheck, test, deploy. Note any `predeploy` or `postdeploy` hook and what it guards.
 - Platform config: `wrangler.toml`, `vercel.json`, `fly.toml`, `serverless.yml`, `Dockerfile`, `k8s/`, `.github/workflows/`. Which environments exist, and the command that lists secrets for each (for example `wrangler secret list --env production`, `flyctl secrets list`, `vercel env ls`).
+- Release branch: the branch production deploys from (from CI triggers, branch protection notes, or the deploy script). Note any check the deploy script makes on it.
+- Rollback: how to put the previous version back on each environment (for example `wrangler rollback --env production`, `vercel rollback`, `flyctl releases` plus a redeploy of the previous image, or a redeploy of the previous tag through the guarded script).
+- Tests: whether the test command reaches anything shared (a staging or production URL, a shared database, a real third-party API, a queue). Look at test setup files, `.env.test` names and fixtures. A test run that writes to a shared system is not read-only, and `/pre-release` will skip it.
 - Migrations: a `migrations/` directory and the tool that applies it. Note whether a command can apply SQL without recording it in the tracker; that is a gotcha worth caching.
 - Health: a route under `/health`, `/healthz`, `/.well-known` or similar, and the production hostname it answers on.
 - `CLAUDE.md` and `AGENTS.md` at the root: which exists, and whether a `## Security skills` block is already there.
@@ -32,7 +35,7 @@ Done when every bullet has an answer or an explicit "not found".
 
 ### 2. Present and confirm
 
-Summarise in one screen: the deploy command per environment, the guard hooks present, the secret-list command, the health URL, the test and typecheck commands, the migration tool and any gotcha. Lead with the recommended answer for each so the user can accept in a word. Ask only where exploration left a genuine branch (two deploy paths, no health route, no tests).
+Summarise in one screen: the deploy command per environment, the guard hooks present, the secret-list command, the health URL, the rollback command, the release branch, the test and typecheck commands and whether tests touch anything shared, the migration tool and any gotcha. Lead with the recommended answer for each so the user can accept in a word. Ask only where exploration left a genuine branch (two deploy paths, no health route, no tests).
 
 One hard question, always asked:
 
@@ -50,16 +53,19 @@ Record the answer verbatim. `/pre-release` prints exactly this command on GO.
 Written by /setup-security-skills on <date>. Edit by hand when something changes.
 
 ## Environments
-| Env | Deploy command (the only one) | Secret list command | Health URL |
-|---|---|---|---|
-| production | `<cmd>` | `<cmd>` | `<url>` |
-| staging | `<cmd>` | `<cmd>` | `<url>` |
+Default target for /pre-release: production
+Release branch: `<branch>`
+
+| Env | Deploy command (the only one) | Rollback command | Secret list command | Health URL |
+|---|---|---|---|---|
+| production | `<cmd>` | `<cmd>` | `<cmd>` | `<url>` |
+| staging | `<cmd>` | `<cmd>` | `<cmd>` | `<url>` |
 
 ## Checks
 - Typecheck: `<cmd>`
-- Tests: `<cmd>`
+- Tests: `<cmd>`  (touches shared systems: <no | yes, which>)
 - Migrations pending: `<cmd>`  (apply with `<cmd>`; never with `<the bypass>`)
-- Clean-tree paths that the bundler ships from the working tree: `<paths>`
+- Clean-tree paths that the bundler ships from the working tree: `<paths, or "whole tree">`
 
 ## Gotchas
 - <one per line: the unwritten convention, the flag that silently targets the wrong environment, the cache that needs a key bump>

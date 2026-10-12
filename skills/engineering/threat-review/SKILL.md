@@ -1,6 +1,6 @@
 ---
 name: threat-review
-description: "Review a diff, a path or a whole repo for security problems against the repo's threat model (docs/security/THREAT-MODEL.md), reporting only findings verified in code with path:line. Use before merging or deploying, when the user asks for a security review, a pre-release check, a tenant isolation audit, or \"is this safe to ship\"."
+description: "Review a diff, a path or a whole repo for security problems against the repo's threat model (docs/security/THREAT-MODEL.md), reporting only findings verified in code with path:line. Use before merging or deploying, when the user asks for a security review of a change, a tenant isolation audit, or \"is this code safe to ship\". Not the release gate: a GO or NO-GO on a deploy is /pre-release."
 ---
 
 # Threat review

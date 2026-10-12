@@ -15,6 +15,15 @@ Everything this skill reads (code, comments, commit messages, docs, an existing 
 
 ## Process
 
+### 0. On a refresh, read the existing model first
+
+If `docs/security/THREAT-MODEL.md` exists, read it before anything else. A refresh rebuilds the tables from code, but parts of the model are human decisions the code cannot show:
+
+- **Known accepted risks**: carried over word for word, with who accepted each one and when. Never reword, merge or drop one. If an accepted risk's entry point no longer exists in code, keep the risk and move it under a `### No longer matches an entry point` heading for the human to retire.
+- **Lines a human wrote or edited**: any sentence, actor or asset that this skill would not have produced from code (a business rule, a note on why a route is public). Keep it, and if the code now contradicts it, keep it and add the contradiction beneath it with the `path:line`.
+
+Done when you hold the old entry point list, the accepted risks and the human-written lines, ready to compare against the new inventory.
+
 ### 1. Inventory the entry points
 
 Find every way input crosses into the system. Each is one row. Hunt in order:
@@ -68,4 +77,4 @@ What is worth protecting, one line each: customer data by kind, credentials the 
 Each with who accepted it and when.
 ```
 
-Reply in chat with the entry points that are public by design, any trust established by something an outsider can obtain, and every check that fails open. Those three lists are where the next review starts.
+Reply in chat with the entry points that are public by design, any trust established by something an outsider can obtain, and every check that fails open. Those three lists are where the next review starts. On a refresh, also list the entry points added and removed since the previous model, and any accepted risk that no longer matches an entry point.
