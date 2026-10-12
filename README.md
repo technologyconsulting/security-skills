@@ -4,7 +4,7 @@ Security skills for coding agents: threat model a service, review every change a
 
 They follow the shape of [Matt Pocock's skills](https://github.com/mattpocock/skills): small, composable, editable, model-agnostic. His pack has no security step. This one is the security step.
 
-**Read-only by design.** Every skill reads and reports. The only files a skill writes are its own reports under `docs/security/`, plus one short pointer block that setup adds to your `CLAUDE.md` or `AGENTS.md`. Fixes, deploys, secret rotation and configuration changes stay with the human.
+**Read-only by design.** Every skill reads and reports. The only files a skill writes are its own reports under `docs/security/`, plus one short pointer block that setup adds to your `CLAUDE.md` or `AGENTS.md`. Fixes, deploys, secret rotation and configuration changes stay with the human. The one exception is `/upgrade-security-skills`, which updates the plugin on your own machine and nothing else.
 
 ## Installation
 
@@ -33,6 +33,8 @@ Include `setup-security-skills` when the installer asks which skills to take. Up
 
 </details>
 
+Updates: every session starts with a version check, and prints one line when a newer version exists. Run `/upgrade-security-skills` to take it; restart Claude Code afterwards, because a running session keeps the skills it loaded at start.
+
 Then run `/setup-security-skills` once per repo. It finds your deploy command, secret store and health endpoint, confirms them with you, and writes `docs/security/release.md` so the other skills know how this repo ships.
 
 ## The skills
@@ -44,6 +46,7 @@ Then run `/setup-security-skills` once per repo. It finds your deploy command, s
 | [`/secrets-audit`](./skills/engineering/secrets-audit/SKILL.md) | Before a release, after onboarding a new secret, or when a rotation is due. | `docs/security/reviews/<date>-secrets.md` |
 | [`/pre-release`](./skills/engineering/pre-release/SKILL.md) | When you are about to deploy. Read-only GO or NO-GO, and the single command to run if GO. | chat only |
 | [`/setup-security-skills`](./skills/engineering/setup-security-skills/SKILL.md) | Once per repo. | `docs/security/release.md` and a block in `CLAUDE.md` or `AGENTS.md` |
+| [`/upgrade-security-skills`](./skills/engineering/upgrade-security-skills/SKILL.md) | When a session opens with "a newer version is available". Updates the plugin and does what the changelog asks. | the plugin install, then via setup and threat-model |
 
 A second bucket, [`skills/security-team/`](./skills/security-team/README.md), is for people who run systems rather than write them: Linux hosts, containers, Microsoft 365. It is planned, listed, and empty until each skill has been tested on a real system.
 

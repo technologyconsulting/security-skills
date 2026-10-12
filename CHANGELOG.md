@@ -1,8 +1,20 @@
 # Changelog
 
+Each entry may carry an `After upgrading:` line. `/upgrade-security-skills` reads those lines and does the repo-side steps they name.
+
+## 0.4.0 (2026-10-12)
+
+Update detection and a one-step upgrade.
+
+- **Session-start version check.** A plugin hook runs `scripts/check-version.sh` when a session opens. It compares the installed version with the marketplace manifest on GitHub, fetched at most once a day and cached under `~/.cache/security-skills`, and prints one line when a newer version exists. Up to date, offline or on any error it prints nothing and never fails the session.
+- **`/upgrade-security-skills`.** Runs the two plugin commands, reads the new changelog, and does the repo-side steps its `After upgrading:` lines name through `/setup-security-skills` and `/threat-model`, with their usual confirmations. Ends by saying a restart is needed, because a running session keeps the skills it loaded at start.
+- **Read-only rule, one stated exception.** The upgrade skill changes the plugin installation on the user's machine, which is their own tooling, and nothing else by itself.
+
 ## 0.3.0 (2026-10-12)
 
-Fixes for the bugs and inconsistencies from the first review. `release.md` gains fields, so re-run `/setup-security-skills` on existing repos.
+Fixes for the bugs and inconsistencies from the first review. `release.md` gains fields.
+
+After upgrading: re-run /setup-security-skills.
 
 - **`/secrets-audit` finds hardcoded secrets.** New step 4 scans tracked source for credential prefixes and secret-named literals, printing only the redacted shape. Step 1 now covers `import.meta.env`, `Bun.env`, `Deno.env.get`, bracketed and destructured access, and flags secrets behind client prefixes (`VITE_`, `NEXT_PUBLIC_` and others).
 - **`release.md` records rollback, release branch, default target and test safety.** `/pre-release` reads them: it prints the real rollback command, checks the recorded release branch, says which environment it chose, and skips tests that touch shared systems instead of running them.

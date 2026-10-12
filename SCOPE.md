@@ -7,7 +7,7 @@ This repo is the set of security skills Blankitt uses on its own services. It is
 An issue stays open only if it clears both parts:
 
 1. **Observed failure.** It describes something that went wrong in a real session: what you ran, what the skill did, what you expected. A hypothetical improvement does not clear this part.
-2. **Fits the rule.** Every skill reads and reports. A proposal that has a skill change a system (apply a fix, rotate a secret, run a deploy, edit a firewall) does not fit, however useful. Those actions stay with the human.
+2. **Fits the rule.** Every skill reads and reports. A proposal that has a skill change a system (apply a fix, rotate a secret, run a deploy, edit a firewall) does not fit, however useful. Those actions stay with the human. Updating the pack itself on the user's machine is the one exception, because it is their tooling, not a system.
 
 ## By bucket
 
