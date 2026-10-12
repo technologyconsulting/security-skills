@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 (2026-10-12)
+
+Closes the gaps in `/threat-review` from the first review.
+
+- **Four new checks.** Outbound requests the caller steers (SSRF, checked after DNS resolution and every redirect), token and signature verification (pinned algorithm, expiry, issuer, audience, cookie flags, webhook replay), browser boundaries (CORS and CSRF), and, once per review, dependencies and build (new packages, install scripts, lockfile drift, unsafe CI triggers, unpinned actions, a read-only audit). Checks that cannot apply are marked n/a with a reason.
+- **Severity rubric and verdict rule** in `GLOSSARY.md`. Severity comes from the actor and impact, not the bug class. DO NOT SHIP for any critical or high, SHIP WITH FIXES for mediums only, SHIP otherwise.
+- **Default diff base.** With no scope given on a feature branch, the review diffs from the merge-base with the remote default branch.
+- **`/threat-model`** records outbound calls the input steers, so check 11 has a starting list.
+- **`/pre-release` check 11** follows the new verdict rule. Its old SHIP WITH FIXES logic could never pass, because a fix commit moves HEAD past the review it fixed. It now also refuses a report whose verdict line disagrees with its own findings.
+
 ## 0.3.0 (2026-10-12)
 
 Fixes for the bugs and inconsistencies from the first review. `release.md` gains fields, so re-run `/setup-security-skills` on existing repos.

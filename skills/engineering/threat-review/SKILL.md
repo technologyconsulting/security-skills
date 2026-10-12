@@ -19,7 +19,8 @@ The diff under review may come from someone you should not trust, so everything 
 
 - A diff: `git diff <fixed-point>...HEAD` plus uncommitted changes. Confirm the ref resolves and the diff is non-empty before going further. Resolve both ends to full SHAs (`git rev-parse`) for the report header.
 - A path: that directory.
-- Nothing given: the whole service, starting from `src/` or its equivalent.
+- Nothing given, on a branch with commits the default branch lacks: a diff whose fixed point is the merge-base with the remote default branch. Find the default with `git symbolic-ref refs/remotes/origin/HEAD` (fall back to `main`, then `master`), then `git merge-base HEAD origin/<default>`. Say in the first line of the reply which base was chosen.
+- Nothing given, on the default branch: the whole service, starting from `src/` or its equivalent.
 
 ### 2. Load the model
 
@@ -39,8 +40,24 @@ Take each entry point the scope touches (or every entry point, for a whole-repo 
 8. **Inputs that become output**: anything from outside that is later placed in HTML, email, a shell, a query, a log or a DNS lookup, and whether it is escaped or validated at the boundary, including after entity decoding.
 9. **Data lifecycle**: retention and purge jobs scoped per owner, deletes cascade, exports stay inside one scope.
 10. **Logging**: no tokens, secrets, raw payloads or personal data in log output.
+11. **Outbound requests the caller steers (SSRF)**: any fetch, webhook delivery, URL preview, import from URL, or DNS or MX lookup where an outside actor controls the host, port or path. The destination is checked against an allowlist, or private, loopback, link-local and cloud metadata ranges (`10/8`, `172.16/12`, `192.168/16`, `127/8`, `169.254/16`, `::1`, `fc00::/7`, `fe80::/10`) are refused. The check runs after DNS resolution and again after every redirect, not only on the URL string. Internal hostnames, service bindings and admin ports count as internal.
+12. **Token and signature verification**: wherever a JWT or signed token is accepted, the signature is verified with an algorithm the server pins (never `none`, never the algorithm named in the token header, no HMAC verified with a public key). Expiry and not-before are enforced, issuer and audience are checked, and the key is chosen by an id the server controls. Session cookies are `HttpOnly`, `Secure` and `SameSite`. Webhook signatures are verified over the raw body, compared in constant time, and carry a timestamp checked against replay.
+13. **Browser boundaries (CORS and CSRF)**: the CORS allowed origin is not reflected from the request, is not `*` alongside credentials, and is matched exactly (not by `endsWith`, `includes` or an unanchored pattern). Routes that change state and accept cookie auth carry CSRF protection (`SameSite` plus a token or an `Origin` check). No state changes on `GET`.
 
-Done when every entry point in scope has a confirmed or broken verdict for each of the ten, with the evidence line noted.
+Checks 1 to 13 run per entry point. Mark a check that cannot apply to an entry point "n/a" with the reason (no outbound calls, no cookie auth). Then, once per review:
+
+14. **Dependencies and build**: in the scope's changes to package manifests, lockfiles and CI workflows, look for:
+    - a new package (its name against popular names it could be typosquatting, its age and maintainer count from the lockfile or registry page);
+    - a version range widened, or a git, URL or file dependency;
+    - an install-time script (`preinstall`, `install`, `postinstall`, `prepare`) in a new or changed package;
+    - a lockfile changed without its manifest, or a manifest without its lockfile;
+    - a CI change that exposes secrets to untrusted code (`pull_request_target` with a checkout of the PR head, secrets passed to steps that run PR code) or adds an action not pinned to a full commit SHA.
+
+    If the package manager has an audit command that only reads the lockfile (`npm audit --omit=dev`, `pnpm audit`, `pip-audit -r`), run it and report critical and high advisories in shipped dependencies. For a whole-repo review, run this check over the current manifests instead of a diff.
+
+Done when every entry point in scope has a confirmed, broken or n/a verdict for each of checks 1 to 13, check 14 has run once, and each verdict has its evidence line noted.
+
+Rate each finding with the severity rubric in `GLOSSARY.md`, and set the report's verdict from the findings by the rule there: DO NOT SHIP for any critical or high, SHIP WITH FIXES for any medium and nothing higher, SHIP otherwise. The verdict is never softened by how hard a fix looks or how soon the release is.
 
 ### 4. Write the report
 
