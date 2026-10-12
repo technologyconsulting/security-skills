@@ -4,7 +4,7 @@ Security skills for coding agents: threat model a service, review every change a
 
 They follow the shape of [Matt Pocock's skills](https://github.com/mattpocock/skills): small, composable, editable, model-agnostic. His pack has no security step. This one is the security step.
 
-**Read-only by design.** Every skill reads and reports. The only files a skill writes are its own reports under `docs/security/`. Fixes, deploys, secret rotation and configuration changes stay with the human.
+**Read-only by design.** Every skill reads and reports. The only files a skill writes are its own reports under `docs/security/`, plus one short pointer block that setup adds to your `CLAUDE.md` or `AGENTS.md`. Fixes, deploys, secret rotation and configuration changes stay with the human.
 
 ## Installation
 

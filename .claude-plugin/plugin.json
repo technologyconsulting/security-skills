@@ -1,6 +1,6 @@
 {
   "name": "security-skills",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Security skills for coding agents: threat model a service, review a diff against that model, audit secrets, and gate a release. Every skill reads and reports; none changes a system.",
   "author": {
     "name": "Blankitt",
