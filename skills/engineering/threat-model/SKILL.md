@@ -32,6 +32,7 @@ Find every way input crosses into the system. Each is one row. Hunt in order:
 - Inbound messages: email handlers, queue consumers, pub/sub subscriptions, cron or scheduled handlers that fetch from outside.
 - Uploads and parsers: anything that decompresses, parses XML or JSON from outside, or writes a file before validating it.
 - Cheap routes: entry points whose cost to call is far below what they trigger (DNS fan-out, email sends, outbound fetches, LLM calls, decompression).
+- Outbound calls the input steers: webhooks delivered to customer URLs, URL previews and imports, DNS or MX lookups on names a customer supplies. Record which part of the destination the caller controls; `/threat-review` check 11 starts here.
 - Operator and internal surfaces: admin routes, internal service-to-service routes, CLI or scripts that run against production.
 - Identifiers that act as credentials: any token published somewhere public (in DNS, in a URL customers share, in a QR code) that the system then treats as proof of who is calling.
 

@@ -20,6 +20,17 @@ The written list of entry points, trust boundaries and actors for one service, w
 **Finding**:
 One verified problem: a `path:line`, the code, the actor, the impact (who can do what to whom) and the smallest fix. A finding without a `path:line` is a hunch, and hunches are not reported.
 
+**Severity**:
+How bad a finding is, rated from its actor and impact sentence, never from its bug class. When torn between two, pick the higher and say why in one line.
+
+- **Critical**: an actor with no special standing (anonymous, or any user of another tenant) can, without unusual conditions, read or change another party's data, take over an account, run code on the system, or obtain a credential.
+- **High**: critical-level impact behind a precondition an attacker can plausibly meet (an account on the platform, a published token, a victim clicking a link); or an anonymous actor can cause material cost or outage (billing, email sending reputation, a resource that falls over); or an auth gate that fails open.
+- **Medium**: impact that needs an unlikely condition or an already-privileged actor; exposure limited to metadata; abuse whose cost is bounded; a missing defence where another control still holds.
+- **Low**: hardening, with no path from an actor to an impact today.
+
+**Verdict**:
+The outcome of a `/threat-review`, set by its findings alone. DO NOT SHIP: any critical or high. SHIP WITH FIXES: any medium, nothing higher; the mediums ship as known issues. SHIP: low findings or none.
+
 **Fail open / fail closed**:
 What a check does when the thing it depends on is missing or errors. A tier check that returns "no limit" when the billing service is down fails open. A gate that refuses when its secret is unset fails closed.
 
